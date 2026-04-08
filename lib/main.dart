@@ -1,29 +1,80 @@
-import 'package:flutter/material.dart';
 import 'models/student.dart';
 import 'models/teacher.dart';
 import 'models/classroom.dart';
+import 'dart:io';
 
 void main() {
-  // Tạo giáo viên
-  Teacher t1 = Teacher("T01", "Mr. John", 40, "Male", "Math", 1500);
-  Teacher t2 = Teacher("T02", "Ms. Anna", 35, "Female", "English", 1400);
+  print("=== Nhập thông tin lớp học ===");
 
-  // Tạo học sinh
-  Student s1 = Student("S01", "Alice", 16, "Female", "10A", [8, 7.5, 9]);
-  Student s2 = Student("S02", "Bob", 17, "Male", "10A", [6, 7, 8]);
-  Student s3 = Student("S03", "Charlie", 16, "Male", "10A", [9, 9.5, 10]);
+  print("Nhập ID lớp:");
+  String classId = stdin.readLineSync()!;
 
-  // Tạo lớp học
-  Classroom class1 = Classroom("C01", "Class 10A");
+  print("Nhập tên lớp:");
+  String className = stdin.readLineSync()!;
 
-  // Gán giáo viên
-  class1.assignTeacher(t1);
+  Classroom classroom = Classroom(classId, className);
 
-  // Thêm học sinh
-  class1.addStudent(s1);
-  class1.addStudent(s2);
-  class1.addStudent(s3);
+  // Nhập giáo viên
+  print("\n=== Nhập thông tin giáo viên ===");
+  Teacher teacher = inputTeacher();
+  classroom.assignTeacher(teacher);
 
-  // Hiển thị thông tin lớp
-  class1.displayClassInfo();
+  // Nhập số lượng học sinh
+  print("\nNhập số lượng học sinh:");
+  int n = int.parse(stdin.readLineSync()!);
+
+  for (int i = 0; i < n; i++) {
+    print("\n--- Nhập học sinh ${i + 1} ---");
+    Student student = inputStudent();
+    classroom.addStudent(student);
+  }
+
+  // Hiển thị thông tin
+  classroom.displayClassInfo();
+}
+
+Teacher inputTeacher() {
+  print("Nhập ID giáo viên:");
+  String id = stdin.readLineSync()!;
+
+  print("Nhập tên:");
+  String name = stdin.readLineSync()!;
+
+  print("Nhập tuổi:");
+  int age = int.parse(stdin.readLineSync()!);
+
+  print("Nhập giới tính:");
+  String gender = stdin.readLineSync()!;
+
+  print("Nhập môn dạy:");
+  String subject = stdin.readLineSync()!;
+
+  print("Nhập lương:");
+  double salary = double.parse(stdin.readLineSync()!);
+
+  return Teacher(id, name, age, gender, subject, salary);
+}
+
+Student inputStudent() {
+  print("Nhập ID học sinh:");
+  String id = stdin.readLineSync()!;
+
+  print("Nhập tên:");
+  String name = stdin.readLineSync()!;
+
+  print("Nhập tuổi:");
+  int age = int.parse(stdin.readLineSync()!);
+
+  print("Nhập giới tính:");
+  String gender = stdin.readLineSync()!;
+
+  print("Nhập lớp:");
+  String grade = stdin.readLineSync()!;
+
+  print("Nhập điểm (cách nhau bởi dấu cách, ví dụ: 8 7.5 9):");
+  List<String> inputScores = stdin.readLineSync()!.split(" ");
+  List<double> scores =
+      inputScores.map((e) => double.parse(e)).toList();
+
+  return Student(id, name, age, gender, grade, scores);
 }
